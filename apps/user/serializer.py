@@ -28,11 +28,15 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         password = validated_data.pop('password', None)
+        role = validated_data.get('role', 'user')
+
         user = User(**validated_data)
         if password:
             user.set_password(password)
         else:
             raise serializers.ValidationError({'password': 'Este campo es obligatorio.'})
+        if role in ['ADMINISTRADOR', 'VENDEDOR']:
+            user.is_staff = True
         user.save()
         return user
 
