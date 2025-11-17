@@ -80,7 +80,7 @@ jobs:
             coverage.xml
             htmlcov/
           retention-days: 30
-          
+
   sonarqube:
     name: Análisis SonarQube
     runs-on: ubuntu-latest
@@ -131,7 +131,7 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=julianab16_proyecto-desarrollo-II-backend
-            -Dsonar.projectName=Proyecto Desarrollo II Backend
+            -Dsonar.projectName=proyecto-desarrollo-II-backend
             -Dsonar.organization=julianab16
             -Dsonar.sources=apps,l_atelier
             -Dsonar.tests=apps
