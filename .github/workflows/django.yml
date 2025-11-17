@@ -68,8 +68,8 @@ jobs:
 
       - name: Generar reporte de cobertura
         run: |
-          echo "📊 Cobertura de código:"
-          pytest --cov=apps --cov-report=term-missing --no-cov-on-fail || echo "⚠️ Cobertura baja, pero continuando..."
+          echo "Cobertura de código:"
+          pytest --cov=apps --cov-report=term-missing --no-cov-on-fail || echo " Cobertura baja, pero continuando..."
 
       - name: Subir reportes de cobertura
         uses: actions/upload-artifact@v4
@@ -102,12 +102,12 @@ jobs:
 
       - name: Verificar archivos descargados
         run: |
-          echo "📁 Archivos en el directorio:"
+          echo "Archivos en el directorio:"
           ls -la
           if [ -f coverage.xml ]; then
-            echo "✅ coverage.xml encontrado"
+            echo "coverage.xml encontrado"
           else
-            echo "⚠️ coverage.xml no encontrado, SonarQube continuará sin cobertura"
+            echo "coverage.xml no encontrado, SonarQube continuará sin cobertura"
           fi
 
       - name: Análisis SonarQube
@@ -115,14 +115,6 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        with:
-          args: >
-            -Dsonar.projectKey=${{ github.event.repository.name }}
-            -Dsonar.organization=${{ github.repository_owner }}
-            -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.sources=.
-            -Dsonar.exclusions=**/migrations/**,**/tests/**,**/staticfiles/**,**/venv/**,**/__pycache__/**,**/htmlcov/**
-            -Dsonar.python.version=3.11
 
       - name: Verificar Quality Gate
         uses: SonarSource/sonarqube-quality-gate-action@master
