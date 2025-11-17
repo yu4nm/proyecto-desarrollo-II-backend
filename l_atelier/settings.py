@@ -19,10 +19,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Secret key con valor por defecto para CI
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-test-key-only-for-ci')
+SECRET_KEY = config('SECRET_KEY')
 
 # Debug
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 # Allowed hosts
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
