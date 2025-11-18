@@ -283,7 +283,7 @@ jobs:
     needs: [test, sonarqube, lint]
     # Ejecuta en main Y develop
     if: |
-      github.event_name == 'push' && 
+      github.event_name == 'pull_request' && 
       (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
       
     steps:
