@@ -167,7 +167,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-      - name: 📊 Resumen del Análisis
+      - name: Resumen del Análisis
         if: always()
         run: |
           echo "## 📊 Resumen de SonarQube" >> $GITHUB_STEP_SUMMARY
@@ -177,21 +177,21 @@ jobs:
             echo "### ✅ Quality Gate: PASSED" >> $GITHUB_STEP_SUMMARY
             echo "El código cumple con los estándares de calidad." >> $GITHUB_STEP_SUMMARY
           else
-            echo "### ❌ Quality Gate: FAILED" >> $GITHUB_STEP_SUMMARY
+            echo "### Quality Gate: FAILED" >> $GITHUB_STEP_SUMMARY
             echo "El código NO cumple con los estándares de calidad." >> $GITHUB_STEP_SUMMARY
           fi
           
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Detalles:**" >> $GITHUB_STEP_SUMMARY
-          echo "- 🔗 [Ver Dashboard Completo](${{ secrets.SONAR_HOST_URL }}/dashboard?id=julianab16_proyecto-desarrollo-II-backend)" >> $GITHUB_STEP_SUMMARY
-          echo "- 📈 Cobertura: ${{ steps.check-coverage.outputs.coverage_found == 'true' && '✅ Reportada' || '⚠️ No disponible' }}" >> $GITHUB_STEP_SUMMARY
-          echo "- 🏷️ Branch: \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "-  [Ver Dashboard Completo](${{ secrets.SONAR_HOST_URL }}/dashboard?id=julianab16_proyecto-desarrollo-II-backend)" >> $GITHUB_STEP_SUMMARY
+          echo "-  Cobertura: ${{ steps.check-coverage.outputs.coverage_found == 'true' && '✅ Reportada' || '⚠️ No disponible' }}" >> $GITHUB_STEP_SUMMARY
+          echo "-  Branch: \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
           
           if [ "${{ github.event_name }}" == "pull_request" ]; then
-            echo "- 🔀 PR #${{ github.event.number }}" >> $GITHUB_STEP_SUMMARY
+            echo "-  PR #${{ github.event.number }}" >> $GITHUB_STEP_SUMMARY
           fi
 
-      - name: 💬 Comentar en PR (si falla)
+      - name: Comentar en PR (si falla)
         if: failure() && github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
@@ -281,8 +281,11 @@ jobs:
     name: Build y Deploy
     runs-on: ubuntu-latest
     needs: [test, sonarqube, lint]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    
+    # Ejecuta en main Y develop
+    if: |
+      github.event_name == 'push' && 
+      (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+      
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
